@@ -7,13 +7,19 @@ import { Routes } from "./interfaces/routes.interface";
 class App {
   public server;
   public app: express.Application;
+  public port: string | number;
 
 
   constructor(routes: Routes[]) {
     this.server = express();
+    this.port =  3000;
 
     this.middlewares();
     this.initializeRoutes(routes);
+  }
+
+  public listen() {
+    this.app.listen(this.port);
   }
 
   middlewares() {

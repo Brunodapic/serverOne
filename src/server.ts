@@ -1,3 +1,7 @@
-import app from "./app";
+import App from './app';
+import IndexRoute from './routes/index.route';
 
-app.listen(3333);
+
+const app = new App([new IndexRoute()]);
+
+app.listen();
