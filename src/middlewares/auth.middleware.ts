@@ -12,10 +12,11 @@ const authMiddleware = async (req: any, res: Response, next: NextFunction) => {
 
     if (Authorization) {
       console.log(Authorization);
+      next();
     } else {
       next(new HttpException("Authentication token missing", 404));
     }
-    next();
+   
   } catch (error) {
     console.log(error.message);
     next(new HttpException("Wrong authentication token, bro", 401));
