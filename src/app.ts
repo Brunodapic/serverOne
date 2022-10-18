@@ -1,36 +1,23 @@
 import express from "express";
-import { Routes } from "./interfaces/routes.interface";
 import routes from "./routes";
 
 class App {
-  public app: express.Application;
+  public server;
 
-
-  constructor(routes: Routes[]) {
-    this.app = express();
-
+  constructor() {
+    this.server = express();
 
     this.middlewares();
-    this.initializeRoutes(routes);
-  }
-
-  public listen() {
-    this.app.listen(3000);
-  }
-
-  private initializeRoutes(routes: Routes[]) {
-    routes.forEach(route => {
-      this.app.use('/', route.router);
-    });
+    this.routes();
   }
 
   middlewares() {
-    this.app.use(express.json());
+    this.server.use(express.json());
   }
 
   routes() {
-    this.app.use(routes);
+    this.server.use(routes);
   }
 }
 
-export default App;
+export default new App().server;
