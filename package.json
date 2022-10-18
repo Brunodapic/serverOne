@@ -1,7 +1,7 @@
 {
   "name": "base-api-ts",
   "version": "1.0.0",
-  "main": "app.js",
+  "main": "index.js",
   "license": "MIT",
   "scripts": {
     "build": "tsc --project ./",
@@ -9,8 +9,6 @@
     "start:prod": "node dist/server.js"
   },
   "dependencies": {
-    "@types/cors": "^2.8.12",
-    "cors": "^2.8.5",
     "express": "^4.17.1"
   },
   "devDependencies": {
