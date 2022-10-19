@@ -1,10 +1,30 @@
 import { Router } from "express";
+import authMiddleware from "./middlewares/auth.middleware";
+import { Pool } from "pg";
+import dotenv from "dotenv";
 
-import authMiddleware from "./middlewares/auth.middleware"
+dotenv.config();
 const routes = Router();
 
-routes.get("/",authMiddleware ,(req, res) => {
+const pool = new Pool({
+  user: "web2db_yg2d_user",
+  host: "dpg-cd4l29qrrk02t5fabg8g-a",
+  database: "web2db_yg2d",
+  password: "OAwjGQgmQBdnik9qejHiP7EMttUueP3H",
+  port: 5432,
+});
+
+
+routes.get("/", authMiddleware, (req, res) => {
   return res.json({ message: "Hello World" });
+});
+
+routes.get("/db", async (req, res) => {
+  console.log("yes db")
+  const results = await pool.query("SELECT * from people");
+  console.log( results)
+  return res.json({ data: results });
+
 });
 
 export default routes;
