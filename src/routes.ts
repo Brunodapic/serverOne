@@ -23,7 +23,17 @@ routes.get("/", authMiddleware, (req, res) => {
 
 routes.get("/db", async (req, res) => {
   console.log("yes db")
-  const results = await pool.query("SELECT * FROM public.user_table ORDER BY user_id ASC ");
+  const results = await pool.query("SELECT * FROM public.user_table");
+  console.log( results)
+  return res.json({ data: results });
+
+});
+
+
+routes.post("/db", async (req, res) => {
+  console.log("yes db")
+  console.log("INSERT INTO user_table VALUES ("+req.body.email+","+req.body.role+");")
+  const results = await pool.query("INSERT INTO user_table VALUES ('"+req.body.email+"','"+req.body.role+"');");
   console.log( results)
   return res.json({ data: results });
 
