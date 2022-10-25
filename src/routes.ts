@@ -3,7 +3,15 @@ import authMiddleware from "./middlewares/auth.middleware";
 import { Pool } from "pg";
 import dotenv from "dotenv";
 import randomstring from "randomstring";
+import auth from 'auth0' 
 
+var ManagementClient=auth.ManagementClient
+var auth0 = new ManagementClient({
+  domain:'dev-l3j432vbb1glmkjp.us.auth0.com',
+  clientId: 'ZAB2YEr19vPXJW1utRUwKRMSZJUMzik6',
+  clientSecret: '_KbdNfQXtcl4O3FgL58o-3OChoaOliP-Tkw_se2OWH1LChBZSvYGJYovY74iHtQJ',
+  scope: 'read:users update:users',
+});
 dotenv.config();
 const routes = Router();
 
@@ -26,7 +34,7 @@ routes.get("/", authMiddleware, (req, res) => {
 //ZA SVE
 routes.get("/db", async (req, res) => {
   console.log("yes db")
-  const results = await pool.query("SELECT * FROM public.team");
+  const results = await pool.query("SELECT * FROM public.team ORDER BY points,diff ASC");
   console.log( results.rows)
   return res.json({ data: results.rows });
 
@@ -43,6 +51,15 @@ routes.get("/db/kolo/", async (req, res) => {
 routes.get("/db/game/:id", async (req, res) => {
   console.log("yes db")
   const results = await pool.query("SELECT * FROM public.games where games.game_id='"+req.params.id+"' ");
+  const dataSql = results.rows
+  console.log( results.rows)
+  return res.json({ data: results.rows });
+
+});
+
+routes.get("/db/games", async (req, res) => {
+  console.log("yes db")
+  const results = await pool.query("SELECT * FROM public.kolo JOIN games on kolo.id_kolo::INTEGER=games.week ORDER BY kolo.id_kolo::INTEGER ")
   const dataSql = results.rows
   console.log( results.rows)
   return res.json({ data: results.rows });
@@ -89,16 +106,6 @@ routes.delete("/db/comment/:id", async (req, res) => {
 
 });
 
-
-
-routes.post("/db", async (req, res) => {
-  console.log("yes db")
-  console.log("INSERT INTO user_table VALUES ("+req.body.email+","+req.body.role+");")
-  const results = await pool.query("INSERT INTO user_table VALUES ('"+req.body.email+"','"+req.body.role+"');");
-  console.log( results)
-  return res.json({ data: results });
-
-});
 
 
 
