@@ -3,15 +3,8 @@ import authMiddleware from "./middlewares/auth.middleware";
 import { Pool } from "pg";
 import dotenv from "dotenv";
 import randomstring from "randomstring";
-import auth from 'auth0' 
 
-var ManagementClient=auth.ManagementClient
-var auth0 = new ManagementClient({
-  domain:'dev-l3j432vbb1glmkjp.us.auth0.com',
-  clientId: 'ZAB2YEr19vPXJW1utRUwKRMSZJUMzik6',
-  clientSecret: '_KbdNfQXtcl4O3FgL58o-3OChoaOliP-Tkw_se2OWH1LChBZSvYGJYovY74iHtQJ',
-  scope: 'read:users update:users',
-});
+
 dotenv.config();
 const routes = Router();
 
@@ -60,7 +53,6 @@ routes.get("/db/game/:id", async (req, res) => {
 routes.get("/db/games", async (req, res) => {
   console.log("yes db")
   const results = await pool.query("SELECT * FROM public.kolo JOIN games on kolo.id_kolo::INTEGER=games.week ORDER BY kolo.id_kolo::INTEGER ")
-  const dataSql = results.rows
   console.log( results.rows)
   return res.json({ data: results.rows });
 
