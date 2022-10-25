@@ -89,7 +89,8 @@ routes.put("/db/comment/:id", async (req, res) => {
 
 routes.delete("/db/comment/:id", async (req, res) => {
   console.log("yes db")
-  const sql = "DELETE FROM comments WHERE comment_id = '"+req.body.id+"'"
+  console.log(req.body)
+  const sql = "DELETE FROM comments WHERE comment_id = '"+req.params.id+"'"
   console.log(sql)
   const results = await pool.query(sql);
   console.log( results)
