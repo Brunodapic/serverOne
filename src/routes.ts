@@ -75,7 +75,6 @@ routes.post("/db/comment", async (req, res) => {
   const results = await pool.query("INSERT INTO comments VALUES ('"+id+"', '"+req.body.email+"' , '"+req.body.comment+"', '"+req.body.week+"' )");
   console.log( results)
   return res.json({ data: results });
-
 });
 
 routes.put("/db/comment/:id", async (req, res) => {
@@ -90,7 +89,7 @@ routes.put("/db/comment/:id", async (req, res) => {
 
 routes.delete("/db/comment/:id", async (req, res) => {
   console.log("yes db")
-  const sql = "DELETE FROM comments WHERE comment_id = '"+req.body.comment_id+"'"
+  const sql = "DELETE FROM comments WHERE comment_id = '"+req.body.id+"'"
   console.log(sql)
   const results = await pool.query(sql);
   console.log( results)
