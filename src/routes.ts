@@ -49,9 +49,9 @@ routes.get("/db/game/:id", async (req, res) => {
 
 });
 
-routes.put("/db/game/", async (req, res) => {
+routes.put("/db/game/:id", async (req, res) => {
   console.log("yes db")
-  const results = await pool.query("UPDATE games SET team1_score = "+req.body.team1_score+" , team2_score= "+req.body.team2_score + "WHERE game_id = '"+req.body.game_id+"'");
+  const results = await pool.query("UPDATE games SET team1_score = "+req.body.team1_score+" , team2_score= "+req.body.team2_score + "WHERE game_id = '"+req.params.id+"'");
   console.log( results.rows)
   return res.json({ data: results.rows });
 
