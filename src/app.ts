@@ -1,7 +1,7 @@
 import express from "express";
 import cors from 'cors';
 import routes from "./routes";
-const { auth } = require('express-openid-connect');
+/*const { auth } = require('express-openid-connect');
 
 const config = {
   authRequired: false,
@@ -10,7 +10,7 @@ const config = {
   baseURL: 'https://localhost:3000',
   clientID: 'ZAB2YEr19vPXJW1utRUwKRMSZJUMzik6',
   issuerBaseURL: 'https://dev-l3j432vbb1glmkjp.us.auth0.com'
-};
+};*/
 
 class App {
   public server;
@@ -18,7 +18,7 @@ class App {
   constructor() {
     this.server = express();
     this.server.use(cors());
-    this.server.use(auth(config));
+    //this.server.use(auth(config));
 
     this.middlewares();
     this.routes();
