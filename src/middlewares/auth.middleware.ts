@@ -13,8 +13,9 @@ const authMiddleware = async (req: any, res: Response, next: NextFunction) => {
     ssl: true,
   });
   try {
-    console.log(req.headers.authorization);
+    console.log(req.headers.authorization)
     const accToken = req.headers.authorization.split(" ")[1];
+    console.log(accToken)
     const info = await axios.get(
       "https://dev-l3j432vbb1glmkjp.us.auth0.com/userinfo",
       {
@@ -32,6 +33,7 @@ const authMiddleware = async (req: any, res: Response, next: NextFunction) => {
     const role=results.rows[0].user_role
     console.log(role)
     if(role=='user' || role=='admin'){
+      console.log("pass as admin or user")
       next()
     }
   } catch (error) {

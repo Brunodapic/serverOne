@@ -6,7 +6,6 @@ import randomstring from "randomstring";
 import { expressjwt, Request as JWTRequest } from "express-jwt";
 import { GetVerificationKey } from "jwks-rsa";
 import jwksRsa from "jwks-rsa";
-import axios from "axios";
 import adminMiddleware from "./middlewares/admin.middleware";
 
 dotenv.config();
@@ -38,7 +37,8 @@ const pool = new Pool({
   ssl: true,
 });
 
-routes.get("/", checkJwt, authMiddleware, async (req, res) => {
+routes.get("/",authMiddleware , async (req, res) => {
+  console.log("pass auth")
   return res.json({ message: "Hello World" });
 });
 //ZA SVE
@@ -67,8 +67,8 @@ routes.get("/db/game/:id", async (req, res) => {
   return res.json({ data: results.rows });
 });
 
-routes.put("/db/game/:id", checkJwt, adminMiddleware, async (req, res) => {
-  console.log("yes db");
+routes.put("/db/game/:id",checkJwt,adminMiddleware,async (req, res) => {
+  console.log("yes change game score");
   const results = await pool.query(
     "UPDATE games SET team1_score = " +
       req.body.team1_score +
@@ -82,7 +82,7 @@ routes.put("/db/game/:id", checkJwt, adminMiddleware, async (req, res) => {
   return res.json({ data: results.rows });
 });
 
-routes.get("/db/games", async (req, res) => {
+routes.get("/db/games",async (req, res) => {
   console.log("yes db");
   const results = await pool.query(
     "SELECT * FROM public.kolo JOIN games on kolo.id_kolo::INTEGER=games.week ORDER BY kolo.id_kolo::INTEGER "
@@ -126,7 +126,7 @@ routes.post("/db/comment",checkJwt, authMiddleware, async (req, res) => {
   return res.json({ data: results });
 });
 
-routes.put("/db/comment/:id",checkJwt, authMiddleware, async (req, res) => {
+routes.put("/db/comment/:id",checkJwt, adminMiddleware, async (req, res) => {
   console.log("yes db");
   const sql =
     "UPDATE comments SET comment = '" +
@@ -140,7 +140,7 @@ routes.put("/db/comment/:id",checkJwt, authMiddleware, async (req, res) => {
   return res.json({ data: results });
 });
 
-routes.delete("/db/comment/:id",checkJwt, authMiddleware, async (req, res) => {
+routes.delete("/db/comment/:id",checkJwt, adminMiddleware, async (req, res) => {
   console.log("yes db");
   console.log(req.body);
   const sql = "DELETE FROM comments WHERE comment_id = '" + req.params.id + "'";
