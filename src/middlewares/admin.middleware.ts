@@ -3,7 +3,7 @@ import { NextFunction, Response } from "express";
 import { HttpException } from "node-exceptions";
 import { Pool } from "pg";
 
-const authMiddleware = async (req: any, res: Response, next: NextFunction) => {
+const adminMiddleware = async (req: any, res: Response, next: NextFunction) => {
   const pool = new Pool({
     user: "web2db_yg2d_user",
     host: "dpg-cd4l29qrrk02t5fabg8g-a.frankfurt-postgres.render.com",
@@ -31,8 +31,8 @@ const authMiddleware = async (req: any, res: Response, next: NextFunction) => {
     const results = await pool.query(sql);
     const role=results.rows[0].user_role
     console.log(role)
-    if(role=='user' || role=='admin'){
-      next()
+    if(role=='admin'){
+        next()
     }
   } catch (error) {
     console.log(error)
@@ -40,4 +40,4 @@ const authMiddleware = async (req: any, res: Response, next: NextFunction) => {
 
 };
 
-export default authMiddleware;
+export default adminMiddleware;
