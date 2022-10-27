@@ -105,7 +105,7 @@ routes.get("/db/comment/:week", async (req, res) => {
   return res.json({ data: results.rows });
 });
 
-routes.post("/db/comment",checkJwt, authMiddleware, async (req, res) => {
+routes.post("/db/comment",checkJwt, async (req, res) => {
   console.log("yes db");
   const id = randomstring.generate(20);
   const sql =
@@ -126,7 +126,7 @@ routes.post("/db/comment",checkJwt, authMiddleware, async (req, res) => {
   return res.json({ data: results });
 });
 
-routes.put("/db/comment/:id",checkJwt, adminMiddleware, async (req, res) => {
+routes.put("/db/comment/:id",checkJwt,adminMiddleware, async (req, res) => {
   console.log("yes db");
   const sql =
     "UPDATE comments SET comment = '" +
