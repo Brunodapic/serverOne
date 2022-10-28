@@ -41,7 +41,7 @@ const adminMiddleware = async (req: any, res: Response, next: NextFunction) => {
     console.log(sql2);
     const results2 = await pool.query(sql2);
     console.log(results2.rows)
-    if(!results2.rows){
+    if(results2.rows.length > 0){
         next()
     }
    
