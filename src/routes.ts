@@ -1,12 +1,11 @@
 import { Router } from "express";
-import authMiddleware from "./middlewares/auth.middleware";
 import { Pool } from "pg";
 import dotenv from "dotenv";
 import randomstring from "randomstring";
 import { expressjwt, Request as JWTRequest } from "express-jwt";
 import { GetVerificationKey } from "jwks-rsa";
 import jwksRsa from "jwks-rsa";
-import adminMiddleware from "./middlewares/admin.middleware";
+import axios from "axios";
 
 dotenv.config();
 const routes = Router();
@@ -37,8 +36,7 @@ const pool = new Pool({
   ssl: true,
 });
 
-routes.get("/" , async (req, res) => {
-  console.log("pass auth")
+routes.get("/", async (req, res) => {
   return res.json({ message: "Hello World" });
 });
 //ZA SVE
@@ -67,8 +65,8 @@ routes.get("/db/game/:id", async (req, res) => {
   return res.json({ data: results.rows });
 });
 
-routes.put("/db/game/:id",async (req, res) => {
-  console.log("yes change game score");
+routes.put("/db/game/:id", async (req, res) => {
+  console.log("yes db");
   const results = await pool.query(
     "UPDATE games SET team1_score = " +
       req.body.team1_score +
@@ -82,7 +80,7 @@ routes.put("/db/game/:id",async (req, res) => {
   return res.json({ data: results.rows });
 });
 
-routes.get("/db/games",async (req, res) => {
+routes.get("/db/games", async (req, res) => {
   console.log("yes db");
   const results = await pool.query(
     "SELECT * FROM public.kolo JOIN games on kolo.id_kolo::INTEGER=games.week ORDER BY kolo.id_kolo::INTEGER "
