@@ -37,7 +37,7 @@ const pool = new Pool({
   ssl: true,
 });
 
-routes.get("/",authMiddleware , async (req, res) => {
+routes.get("/" , async (req, res) => {
   console.log("pass auth")
   return res.json({ message: "Hello World" });
 });
@@ -67,7 +67,7 @@ routes.get("/db/game/:id", async (req, res) => {
   return res.json({ data: results.rows });
 });
 
-routes.put("/db/game/:id",checkJwt,adminMiddleware,async (req, res) => {
+routes.put("/db/game/:id",async (req, res) => {
   console.log("yes change game score");
   const results = await pool.query(
     "UPDATE games SET team1_score = " +
@@ -105,7 +105,7 @@ routes.get("/db/comment/:week", async (req, res) => {
   return res.json({ data: results.rows });
 });
 
-routes.post("/db/comment",checkJwt, async (req, res) => {
+routes.post("/db/comment", async (req, res) => {
   console.log("yes db");
   const id = randomstring.generate(20);
   const sql =
@@ -126,7 +126,7 @@ routes.post("/db/comment",checkJwt, async (req, res) => {
   return res.json({ data: results });
 });
 
-routes.put("/db/comment/:id",checkJwt,adminMiddleware, async (req, res) => {
+routes.put("/db/comment/:id", async (req, res) => {
   console.log("yes db");
   const sql =
     "UPDATE comments SET comment = '" +
@@ -140,7 +140,7 @@ routes.put("/db/comment/:id",checkJwt,adminMiddleware, async (req, res) => {
   return res.json({ data: results });
 });
 
-routes.delete("/db/comment/:id",checkJwt, adminMiddleware, async (req, res) => {
+routes.delete("/db/comment/:id", async (req, res) => {
   console.log("yes db");
   console.log(req.body);
   const sql = "DELETE FROM comments WHERE comment_id = '" + req.params.id + "'";
