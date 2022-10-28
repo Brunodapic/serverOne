@@ -7,6 +7,7 @@ import { GetVerificationKey } from "jwks-rsa";
 import jwksRsa from "jwks-rsa";
 import axios from "axios";
 import adminMiddleware from "./middlewares/admin.middleware";
+import authMiddleware from "./middlewares/auth.middleware";
 
 dotenv.config();
 const routes = Router();
@@ -104,7 +105,7 @@ routes.get("/db/comment/:week", async (req, res) => {
   return res.json({ data: results.rows });
 });
 
-routes.post("/db/comment", async (req, res) => {
+routes.post("/db/comment",checkJwt ,authMiddleware, async (req, res) => {
   console.log("yes db");
   const id = randomstring.generate(20);
   const sql =
@@ -125,7 +126,7 @@ routes.post("/db/comment", async (req, res) => {
   return res.json({ data: results });
 });
 
-routes.put("/db/comment/:id", async (req, res) => {
+routes.put("/db/comment/:id",checkJwt ,adminMiddleware, async (req, res) => {
   console.log("yes db");
   const sql =
     "UPDATE comments SET comment = '" +
@@ -139,7 +140,7 @@ routes.put("/db/comment/:id", async (req, res) => {
   return res.json({ data: results });
 });
 
-routes.delete("/db/comment/:id", async (req, res) => {
+routes.delete("/db/comment/:id",checkJwt ,adminMiddleware, async (req, res) => {
   console.log("yes db");
   console.log(req.body);
   const sql = "DELETE FROM comments WHERE comment_id = '" + req.params.id + "'";
