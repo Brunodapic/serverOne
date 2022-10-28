@@ -6,6 +6,7 @@ import { expressjwt, Request as JWTRequest } from "express-jwt";
 import { GetVerificationKey } from "jwks-rsa";
 import jwksRsa from "jwks-rsa";
 import axios from "axios";
+import adminMiddleware from "./middlewares/admin.middleware";
 
 dotenv.config();
 const routes = Router();
@@ -65,7 +66,7 @@ routes.get("/db/game/:id", async (req, res) => {
   return res.json({ data: results.rows });
 });
 
-routes.put("/db/game/:id", checkJwt ,async (req, res) => {
+routes.put("/db/game/:id", checkJwt ,adminMiddleware,async (req, res) => {
   console.log("yes db");
   const results = await pool.query(
     "UPDATE games SET team1_score = " +
