@@ -65,7 +65,7 @@ routes.get("/db/game/:id", async (req, res) => {
   return res.json({ data: results.rows });
 });
 
-routes.put("/db/game/:id", async (req, res) => {
+routes.put("/db/game/:id", checkJwt ,async (req, res) => {
   console.log("yes db");
   const results = await pool.query(
     "UPDATE games SET team1_score = " +
