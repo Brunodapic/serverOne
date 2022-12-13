@@ -12,7 +12,7 @@ import authMiddleware from "./middlewares/auth.middleware";
 dotenv.config();
 const routes = Router();
 
-const checkJwt = expressjwt({
+/*const checkJwt = expressjwt({
   secret: jwksRsa.expressJwtSecret({
     cache: true,
     rateLimit: true,
@@ -37,11 +37,16 @@ const pool = new Pool({
   port: 5432,
   ssl: true,
 });
+*/
 
 routes.get("/", async (req, res) => {
-  return res.json({ message: "Hello World" });
+  setTimeout((() => {
+    return res.json({ message: "Hello World" });
+  }), 2000) 
 });
+
 //ZA SVE
+/*
 routes.get("/db", async (req, res) => {
   console.log("yes db");
   const results = await pool.query(
@@ -149,5 +154,5 @@ routes.delete("/db/comment/:id",checkJwt ,adminMiddleware, async (req, res) => {
   console.log(results);
   return res.json({ data: results });
 });
-
+*/
 export default routes;
