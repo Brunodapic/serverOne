@@ -82,7 +82,7 @@ async function sendPushNotifications(snapTitle: string) {
       await webpush.sendNotification(
         sub.sub,
         JSON.stringify({
-          title: "TEST1111111111TESET!",
+          title: "TESET!",
           body: "Somebody just snaped a new photo:",
           redirectUrl: "/index.html",
         })
