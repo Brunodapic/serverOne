@@ -40,10 +40,70 @@ const pool = new Pool({
 */
 
 routes.get("/", async (req, res) => {
-  setTimeout((() => {
+  //odgovara nakon 30 sekundi
+  const subb: any = {
+    sub: {
+      endpoint:
+        "https://fcm.googleapis.com/fcm/send/eSC-AqqUBr8:APA91bF0wjPnFLt0oXGGxXA8KIEfvM-eIsnKvvJUN-zY9vevg1zrathpX3f2q1FaAV7AuhNq1DwjubFpWnuPRguey5b0Ka2a7PYhQyub0eedssNgq0J7OFUBRKSdda460JeLuML_FNOe",
+      expirationTime: null,
+      keys: {
+        p256dh:
+          "BN0ToBoHCptICUGTdo0H_DzCWebFUtesnU4MWN2vY0PKlJlvfVLfBoFvlxxHKCBDevpm-RGTvJtwc5bVDd-vAdM",
+        auth: "Pob8C4SD9T1n3GHCYW9bxg",
+      },
+    },
+  };
+  console.log(req.body.title);
+  setTimeout(() => {
+    sendPushNotifications("test1");
     return res.json({ message: "Hello World" });
-  }), 2000) 
+  }, 10000);
 });
+
+const fs = require("fs");
+const webpush = require("web-push");
+
+// Umjesto baze podataka, čuvam pretplate u datoteci:
+let subscriptions: any[] = [];
+const SUBS_FILENAME = "subscriptions.json";
+try {
+  subscriptions = JSON.parse(fs.readFileSync(SUBS_FILENAME));
+} catch (error) {
+  console.error(error);
+}
+
+routes.post("/not", (req, res) => {
+  console.log(req.body);
+  let sub = req.body.sub;
+  subscriptions.push({ sub });
+  fs.writeFileSync(SUBS_FILENAME, JSON.stringify(subscriptions));
+  res.json({
+    success: true,
+  });
+});
+
+async function sendPushNotifications(snapTitle: string) {
+  webpush.setVapidDetails(
+    "mailto:brunodapic@gmail.com",
+    "BP4a6E2dCioFYOLX87ATPOP3aJQ7g3h0WE-ItH2EaJhS6BB5nx_UBopXltjfotFp5NcFinHDh1sroZ-1erHn6m4",
+    "49xhtK5qD5QNIcDMhoN9k9ZFoFuEKbNXGX_c-6x2bns"
+  );
+  subscriptions.forEach(async (sub) => {
+    try {
+      console.log("Sending notif to", sub.sub);
+      await webpush.sendNotification(
+        sub.sub,
+        JSON.stringify({
+          title: "TEST1111111111TESET!",
+          body: "Somebody just snaped a new photo:",
+          redirectUrl: "/index.html",
+        })
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  });
+}
 
 //ZA SVE
 /*
