@@ -41,7 +41,7 @@ const pool = new Pool({
 
 routes.get("/", async (req, res) => {
   //odgovara nakon 30 sekundi
-  console.log(req.body.title);
+  console.log(new Date());
   setTimeout(() => {
     sendPushNotifications("test1");
     return res.json({ message: "Hello World" });
