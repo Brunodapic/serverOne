@@ -11,6 +11,9 @@ import authMiddleware from "./middlewares/auth.middleware";
 
 dotenv.config();
 const routes = Router();
+const fs = require("fs");
+const webpush = require("web-push");
+const SUBS_FILENAME = "subscriptions.json";
 
 /*const checkJwt = expressjwt({
   secret: jwksRsa.expressJwtSecret({
@@ -39,8 +42,15 @@ const pool = new Pool({
 });
 */
 
+routes.get("/check", async (req, res) => {
+  console.log("CHECK at : ",new Date());
+  console.log(JSON.parse(fs.readFileSync(SUBS_FILENAME)))
+  return res.json({ message: "working" });
+});
+
+
 routes.get("/", async (req, res) => {
-  //odgovara nakon 30 sekundi
+  //odgovara nakon 10 sekundi
   console.log(new Date());
   setTimeout(() => {
     sendPushNotifications("test1");
@@ -48,12 +58,10 @@ routes.get("/", async (req, res) => {
   }, 10000);
 });
 
-const fs = require("fs");
-const webpush = require("web-push");
+
 
 // Umjesto baze podataka, čuvam pretplate u datoteci:
 let subscriptions: any[] = [];
-const SUBS_FILENAME = "subscriptions.json";
 try {
   subscriptions = JSON.parse(fs.readFileSync(SUBS_FILENAME));
 } catch (error) {
@@ -78,13 +86,12 @@ async function sendPushNotifications(snapTitle: string) {
   );
   subscriptions.forEach(async (sub) => {
     try {
-      console.log("Sending notif to", sub.sub);
+      console.log("Sending notification to", sub.sub);
       await webpush.sendNotification(
         sub.sub,
         JSON.stringify({
           title: "TESET!",
-          body: "Somebody just snaped a new photo:",
-          redirectUrl: "/index.html",
+          body: "Tested push notifications in PWA!",
         })
       );
     } catch (error) {
