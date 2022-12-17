@@ -51,11 +51,7 @@ const pool = new Pool({
 });
 */
 
-routes.get("/check", async (req, res) => {
-  console.log("CHECK at : ",new Date());
-  console.log(JSON.parse(fs.readFileSync(SUBS_FILENAME)))
-  return res.json({ message: "working" });
-});
+
 
 
 routes.get("/", async (req, res) => {
@@ -67,6 +63,16 @@ routes.get("/", async (req, res) => {
   }, 10000);
 });
 
+routes.get("/check", async (req, res) => {
+  console.log("CHECK at : ",new Date());
+  console.log(JSON.parse(fs.readFileSync(SUBS_FILENAME)))
+  return res.json({ message: "working" });
+});
+
+routes.get("/count", async (req, res) => {
+  console.log("count at : ",new Date());
+  return res.json({ count: await JSON.parse(fs.readFileSync(SUBS_FILENAME)).length});
+});
 
 
 // Umjesto baze podataka, čuvam pretplate u datoteci:
