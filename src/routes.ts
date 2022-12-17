@@ -15,6 +15,15 @@ const fs = require("fs");
 const webpush = require("web-push");
 const SUBS_FILENAME = "subscriptions.json";
 
+
+let subscriptions: any[] = [];
+try {
+  subscriptions = JSON.parse(fs.readFileSync(SUBS_FILENAME));
+} catch (error) {
+  console.error(error);
+}
+
+
 /*const checkJwt = expressjwt({
   secret: jwksRsa.expressJwtSecret({
     cache: true,
@@ -61,12 +70,6 @@ routes.get("/", async (req, res) => {
 
 
 // Umjesto baze podataka, čuvam pretplate u datoteci:
-let subscriptions: any[] = [];
-try {
-  subscriptions = JSON.parse(fs.readFileSync(SUBS_FILENAME));
-} catch (error) {
-  console.error(error);
-}
 
 routes.post("/not", (req, res) => {
   console.log(req.body);
@@ -92,6 +95,8 @@ async function sendPushNotifications(snapTitle: string) {
         JSON.stringify({
           title: "TESET!",
           body: "Tested push notifications in PWA!",
+          redirectUrl: '/index.html'
+
         })
       );
     } catch (error) {
